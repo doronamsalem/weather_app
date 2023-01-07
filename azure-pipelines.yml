@@ -1,1 +1,32 @@
-https://github.com/doronamsalem/weather_app.git
+trigger:
+- dev
+
+pool:
+  name: Default
+
+
+variables:
+  compose_path: ./docker-compose.yml
+  major_v: 1
+  minor_v: 0
+  staging_image_tag: "$(major_v).$(minor_v)."
+
+steps:
+
+- script: |
+    docker system prune -a -f
+  displayName: 'Clean docker environment'
+
+
+- script: |
+    docker-compose -f $(compose_path) build
+    docker login -u $(DOCKERHUB_USR) -p $(DOCKERHUB_PSW)
+    docker-compose -f $(compose_path) push
+  displayName: 'Docker-compose build & push'
+  
+
+- script: |
+    docker-compose -f $(compose_path) down --remove-orphans -v
+    docker system prune -a -f
+    docker logout
+  displayName: 'Clean environment'
