@@ -4,11 +4,11 @@ services:
     image: test_image:version
     restart: unless-stopped
     ports:
-      - "80:8081"
+      - "8081:8081"
       
   production:
     build: .
     image: doronamsalem/production:version
     restart: unless-stopped
     ports:
-      - "80:8081"
+      - "8081:8081"
