@@ -4,12 +4,12 @@ trigger:
 pool:
   name: Default
 
-
 variables:
   compose_path: ./docker-compose.yml
   major_v: 1
   minor_v: 0
-  staging_image_tag: "$(major_v).$(minor_v)."
+  image_tag: "version" #"$(major_v).$(minor_v)."
+  
 
 steps:
 
@@ -17,13 +17,27 @@ steps:
     docker system prune -a -f
   displayName: 'Clean docker environment'
 
+- script: |
+    echo sonarqube
+  displayName: 'Static testing'
 
 - script: |
-    docker-compose -f $(compose_path) build
     docker login -u $(DOCKERHUB_USR) -p $(DOCKERHUB_PSW)
-    docker-compose -f $(compose_path) push
-  displayName: 'Docker-compose build & push'
-  
+    docker-compose -f $(compose_path) build
+    docker-compose -f $(compose_path) push staging
+  displayName: 'Build & push images'
+
+- script: |
+    kubectl apply -f https://github.com/doronamsalem/configuration/blob/main/k8s/staging.yml
+    python3 ./unittests/website_response.py'
+    kubectl delete -f https://github.com/doronamsalem/configuration/blob/main/k8s/staging.yml
+  displayName: 'Test the app'
+
+- script: |
+    docker-compose -f $(compose_path) push production
+    git clone 
+displayName: 'Push prod image and update deployment image tag'
+
 
 - script: |
     docker-compose -f $(compose_path) down --remove-orphans -v
