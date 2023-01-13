@@ -1,7 +1,7 @@
 services:
-  test:
+  staging:
     build: .
-    image: test_image:version
+    image: doronamsalem/staging:version
     restart: unless-stopped
     ports:
       - "8081:8081"
