@@ -47,7 +47,7 @@ steps:
 - script: |
     docker-compose -f $(compose_path) push production
     git clone 
-displayName: 'Push prod image and update deployment image tag'
+  displayName: 'Push prod image and update deployment image tag'
 
 
 - script: |
