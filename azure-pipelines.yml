@@ -1,6 +1,6 @@
 resources:
   repositories:
-  - repository: configuration
+  - repository: k8s_confs
     type: github
     endpoint: Doron_GitHub
     name: doronamsalem/configuration
@@ -25,6 +25,8 @@ steps:
     echo "cd ~" 
     cd ~
     tree
+    ls -a k8s_confs
+
 
     docker system prune -a -f
   displayName: 'Clean docker environment'
