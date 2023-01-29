@@ -23,8 +23,7 @@ steps:
 - script: |
     pwd
     echo "cd ~" 
-    cd ~
-    tree
+    cd ~ && ls
     ls -a k8s_confs
 
 
