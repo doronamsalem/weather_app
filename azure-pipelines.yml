@@ -1,6 +1,6 @@
 resources:
   repositories:
-  - repository: k8s_confs
+  - repository: configuration
     type: github
     endpoint: Doron_GitHub
     name: doronamsalem/configuration
@@ -21,12 +21,6 @@ variables:
 steps:
 
 - script: |
-    pwd
-    echo "cd ~" 
-    cd ~ && ls
-    ls -a k8s_confs
-
-
     docker system prune -a -f
   displayName: 'Clean docker environment'
 
@@ -38,22 +32,27 @@ steps:
     docker login -u $(DOCKERHUB_USR) -p $(DOCKERHUB_PSW)
     docker-compose -f $(compose_path) build
     docker-compose -f $(compose_path) push staging
-  displayName: 'Build & push images'
+  displayName: 'Build images & push staging'
 
-- script: |
-    kubectl apply -f https://github.com/doronamsalem/configuration/blob/main/k8s/staging.yml
+- script: | # should change ~/configuration/k8s to Kustomize overlay
+    kubectl apply -f ~/configuration/k8s/staging.yml
     python3 ./unittests/website_response.py'
-    kubectl delete -f https://github.com/doronamsalem/configuration/blob/main/k8s/staging.yml
-  displayName: 'Test the app'
-
-- script: |
+    kubectl delete -f ~/configuration/k8s/staging.yml
     docker-compose -f $(compose_path) push production
-    git clone 
-  displayName: 'Push prod image and update deployment image tag'
+  displayName: 'Test staging & push production'
+
+- script: | #trigger argocd
+    git pull  #for prevente conflict
+    sed -i "s/tag:.*/tag: $(image_tag)/g" ~/configuration/helm-production/values.yaml
+    git add ~/configuration/helm-production/values.yaml
+    git commit -m "new production version"
+    git push
+  displayName: 'Update deployment image tag'
 
 
 - script: |
     docker-compose -f $(compose_path) down --remove-orphans -v
     docker system prune -a -f
     docker logout
-  displayName: 'Clean environment'
+    rm -rf ~/configuration
+  displayName: 'Post clean environment'
