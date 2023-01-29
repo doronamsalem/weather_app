@@ -21,10 +21,11 @@ variables:
 steps:
 
 - script: |
-    ls 
-    cd /
+    pwd
+    echo "cd ~" 
+    cd ~
     tree
-    cd -
+
     docker system prune -a -f
   displayName: 'Clean docker environment'
 
