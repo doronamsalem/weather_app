@@ -29,12 +29,10 @@ steps:
   displayName: 'Static testing'
 
 - script: |
+    docker images
     docker login -u $(DOCKERHUB_USR) -p $(DOCKERHUB_PSW)
-    docker-compose -f ./docker-compose.yml build
-    docker-compose -f ./docker-compose.yml push staging
-    pwd 
-    echo ls
-    ls
+    docker-compose -f /home/ec2-user/local_agent/_work/2/s/docker-compose.yml build
+    docker-compose -f /home/ec2-user/local_agent/_work/2/s/docker-compose.yml push staging
     docker images
   displayName: 'Build images & push staging'
 
