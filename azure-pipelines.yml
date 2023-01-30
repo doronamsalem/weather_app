@@ -12,7 +12,7 @@ pool:
   name: Default
 
 variables:
-  compose_path: ./docker-compose.yml
+  compose_path: ~/local_agent/_work/2/s/docker-compose.yml
   major_v: 1
   minor_v: 0
   image_tag: "version1" #"$(major_v).$(minor_v)."
@@ -29,11 +29,9 @@ steps:
   displayName: 'Static testing'
 
 - script: |
-    docker images
     docker login -u $(DOCKERHUB_USR) -p $(DOCKERHUB_PSW)
-    docker-compose -f /home/ec2-user/local_agent/_work/2/s/docker-compose.yml build
-    docker-compose -f /home/ec2-user/local_agent/_work/2/s/docker-compose.yml push staging
-    docker images
+    docker-compose -f $(compose_path) build t
+    docker-compose -f $(compose_path) push staging
   displayName: 'Build images & push staging'
 
 # - script: | # should change ~/configuration/k8s to Kustomize overlay
@@ -44,6 +42,7 @@ steps:
 #   displayName: 'Test staging & push production'
 
 - script: | #trigger argocd
+    cd ~/configuration
     git pull  #for prevente conflict
     sed -i "14s/tag:.*/tag: $(image_tag)/g" ~/configuration/helm-production/values.yaml
     git add ~/configuration/helm-production/values.yaml
