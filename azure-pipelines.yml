@@ -48,7 +48,7 @@ steps:
     git add ~/configuration/helm-production/values.yaml
     git commit -m "new production version"
     git push
-    echo ----------------
+    echo ---------------
     sed -n '14p' file.txt ~/configuration/helm-production/values.yaml
   displayName: 'Update deployment image tag'
 
