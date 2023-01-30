@@ -43,11 +43,7 @@ steps:
 
 - script: | #trigger argocd
     cd ~/configuration
-   # git pull  for prevente conflict
     sed -i "14s/tag:.*/tag: $(image_tag)/g" ~/configuration/helm-production/values.yaml
-   # git add ~/configuration/helm-production/values.yaml
-   # git commit -m "new production version"
-   # git push
     sed -n '14p' ~/configuration/helm-production/values.yaml
   displayName: 'Update deployment image tag'
 
