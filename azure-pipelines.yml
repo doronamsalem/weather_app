@@ -30,8 +30,8 @@ steps:
 
 - script: |
     docker login -u $(DOCKERHUB_USR) -p $(DOCKERHUB_PSW)
-    docker-compose -f /home/ec2-user/local_agent/_work/2/s/docker-compose.yml build t
-    docker-compose -f /home/ec2-user/local_agent/_work/2/s/docker-compose.yml push staging
+    docker-compose -f $(compose_path) build
+    docker-compose -f $(compose_path) push staging
   displayName: 'Build images & push staging'
 
 # - script: | # should change ~/configuration/k8s to Kustomize overlay
