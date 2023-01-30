@@ -1,8 +1,14 @@
 services:
-  web:
+  staging:
     build: .
-    container_name: aws_proj_server1
-    image: server1_weather_site_image
+    image: doronamsalem/staging:version
     restart: unless-stopped
     ports:
-      - "80:8081"
+      - "8081:8081"
+      
+  production:
+    build: .
+    image: doronamsalem/production:version
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
