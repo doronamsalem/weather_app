@@ -15,7 +15,7 @@ variables:
   compose_path: ./docker-compose.yml
   major_v: 1
   minor_v: 0
-  image_tag: "version" #"$(major_v).$(minor_v)."
+  image_tag: "version1" #"$(major_v).$(minor_v)."
   
 
 steps:
@@ -43,10 +43,12 @@ steps:
 
 - script: | #trigger argocd
     git pull  #for prevente conflict
-    sed -i "s/tag:.*/tag: $(image_tag)/g" ~/configuration/helm-production/values.yaml
+    sed -i "14s/tag:.*/tag: $(image_tag)/g" ~/configuration/helm-production/values.yaml
     git add ~/configuration/helm-production/values.yaml
     git commit -m "new production version"
     git push
+    echo ----------------
+    sed -n '14p' file.txt ~/configuration/helm-production/values.yaml
   displayName: 'Update deployment image tag'
 
 
