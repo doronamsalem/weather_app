@@ -33,7 +33,7 @@ steps:
   inputs:
     containerregistrytype: 'Container Registry'
     dockerRegistryEndpoint: 'doron_DockerHub'
-    dockerComposeFile: $(compose_path)
+    dockerComposeFile: '**/docker-compose.yml'
     action: 'Run a Docker Compose command'
     dockerComposeCommand: 'push staging'
 
