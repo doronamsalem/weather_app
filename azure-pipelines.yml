@@ -48,9 +48,9 @@ steps:
 #   displayName: 'Test staging & push production'
 
 - script: | #trigger argocd
-    cd ~/configuration
-    #git pull  for prevente conflict
+    #cd ~/configuration
     sed -i "14s/tag:.*/tag: $(image_tag)/g" ~/configuration/helm-production/values.yaml
+    #git pull  for prevente conflict
     #git add ~/configuration/helm-production/values.yaml
     #git commit -m "new production version"
     #git push
