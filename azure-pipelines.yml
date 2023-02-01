@@ -28,6 +28,9 @@ steps:
     echo sonarqube
   displayName: 'Static testing'
 
+- script: |
+    docker-compose -f $(compose_path) build
+  displayName: 'Build images & push staging'
 
 - task: DockerCompose@0
   inputs:
@@ -36,12 +39,6 @@ steps:
     dockerComposeFile: '**/docker-compose.yml'
     action: 'Run a Docker Compose command'
     dockerComposeCommand: 'push staging'
-
-- script: |
-    echo $(DOCKERHUB_PSW) | sudo docker login -u $(DOCKERHUB_USR) --password-stdin
-    docker-compose -f $(compose_path) build
-    docker-compose -f $(compose_path) push staging
-  displayName: 'Build images & push staging'
 
 # - script: | # should change ~/configuration/k8s to Kustomize overlay
 #     kubectl apply -f ~/configuration/k8s/staging.yml
