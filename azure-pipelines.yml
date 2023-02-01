@@ -29,7 +29,7 @@ steps:
   displayName: 'Static testing'
 
 - script: |
-    docker login -u $(DOCKERHUB_USR) -p $(DOCKERHUB_PSW)
+    echo $(DOCKERHUB_PSW) | sudo docker login -u $(DOCKERHUB_USR) --password-stdin
     docker-compose -f $(compose_path) build
     docker-compose -f $(compose_path) push staging
   displayName: 'Build images & push staging'
