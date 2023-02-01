@@ -30,7 +30,7 @@ steps:
 
 - script: |
     docker-compose -f $(compose_path) build
-  displayName: 'Build images & push staging'
+  displayName: 'Build images'
 
 - task: DockerCompose@0
   inputs:
@@ -39,7 +39,7 @@ steps:
     dockerComposeFile: '**/docker-compose.yml'
     action: 'Run a Docker Compose command'
     dockerComposeCommand: 'push staging'
-
+  displayName: 'Push staging image'
 # - script: | # should change ~/configuration/k8s to Kustomize overlay
 #     kubectl apply -f ~/configuration/k8s/staging.yml
 #     python3 ./unittests/website_response.py'
@@ -51,9 +51,9 @@ steps:
     cd ~/configuration
     #git pull  for prevente conflict
     sed -i "14s/tag:.*/tag: $(image_tag)/g" ~/configuration/helm-production/values.yaml
-    git add ~/configuration/helm-production/values.yaml
-    git commit -m "new production version"
-    git push
+    #git add ~/configuration/helm-production/values.yaml
+    #git commit -m "new production version"
+    #git push
   displayName: 'Update deployment image tag'
 
 
