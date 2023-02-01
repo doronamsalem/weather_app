@@ -28,6 +28,15 @@ steps:
     echo sonarqube
   displayName: 'Static testing'
 
+
+- task: DockerCompose@0
+  inputs:
+    containerregistrytype: 'Container Registry'
+    dockerRegistryEndpoint: 'doron_DockerHub'
+    dockerComposeFile: $(compose_path)
+    action: 'Run a Docker Compose command'
+    dockerComposeCommand: 'push staging'
+
 - script: |
     echo $(DOCKERHUB_PSW) | sudo docker login -u $(DOCKERHUB_USR) --password-stdin
     docker-compose -f $(compose_path) build
@@ -43,7 +52,7 @@ steps:
 
 - script: | #trigger argocd
     cd ~/configuration
-    git pull  #for prevente conflict
+    #git pull  for prevente conflict
     sed -i "14s/tag:.*/tag: $(image_tag)/g" ~/configuration/helm-production/values.yaml
     git add ~/configuration/helm-production/values.yaml
     git commit -m "new production version"
