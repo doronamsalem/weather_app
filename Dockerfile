@@ -1,4 +1,4 @@
-FROM python:3.9.16-slim-bullseye
+FROM python:3.8.16-slim
 WORKDIR /weather_web_proj
 EXPOSE 8081
 COPY ./requirements.txt /weather_web_proj
