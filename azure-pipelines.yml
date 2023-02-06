@@ -40,6 +40,7 @@ steps:
     action: 'Run a Docker Compose command'
     dockerComposeCommand: 'push staging'
   displayName: 'Push staging image'
+
 # - script: | # should change ~/configuration/k8s to Kustomize overlay
 #     kubectl apply -f ~/configuration/k8s/staging.yml
 #     python3 ./unittests/website_response.py'
@@ -48,8 +49,8 @@ steps:
 #   displayName: 'Test staging & push production'
 
 - script: | #trigger argocd
-    #cd ~/configuration
     sed -i "14s/tag:.*/tag: $(image_tag)/g" ~/configuration/helm-production/values.yaml
+    cd ~/configuration
     #git pull  for prevente conflict
     #git add ~/configuration/helm-production/values.yaml
     #git commit -m "new production version"
